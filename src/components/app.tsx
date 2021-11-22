@@ -1,26 +1,38 @@
 import * as React from "react";
 import { transform } from "@babel/standalone";
-import { Component, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
-interface Props {
-  jsx?: any;
-}
-export const App = ({ jsx }: Props) => {
-  var Component: any = jsx
-    ? transform(jsx, {
-        presets: ["react"],
-      })?.code
-    : null;
+export const App = () => {
+  const { jsx } = useSelector((state: any) => state.app);
+
+  // React.useEffect(() => {
+  //   console.log(
+  //     jsx &&
+  //       transform(jsx, {
+  //         filename: "test.ts",
+  //         presets: [["stage-0", { decoratorsLegacy: true }], "react"],
+  //       })?.code
+  //   );
+  // }, []);
+
+  var Component: any = transform(jsx, {
+    filename: "test.ts",
+    presets: ["react", "env"],
+  })?.code;
+
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState("");
   const onSubmit = (data: any) => setResult(JSON.stringify(data));
 
   return (
     <div>
-      <h1>Test</h1>
-      {console.log(Component)}
-      {jsx && eval(Component)}
+      <h1>test</h1>
+      {eval(Component)}
     </div>
   );
 };
+
+// return <div suppressHydrationWarning={true}>{eval(Component)}</div>;
+//

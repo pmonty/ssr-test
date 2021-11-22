@@ -1,6 +1,7 @@
 const express = require("express"),
   app = express(),
   template = require("./views/template"),
+  babel = require("@babel/standalone"),
   path = require("path");
 
 // Serving static files
@@ -26,23 +27,45 @@ const ssr = require("./views/server");
 // server rendered home page
 app.get("/", (req, res) => {
   var jsx = `
-  <form onSubmit={handleSubmit(onSubmit)}>
 
-    <input {...register("firstName")} placeholder="First name" />
-    <input {...register("lastName")} placeholder="Last name" />
-    <select {...register("category")}>
-      <option value="">Select...</option>
-      <option value="A">Category A</option>
-      <option value="B">Category B</option>
-    </select>
-
-    <p>{result}</p>
-    <input type="submit" />
-  </form>
-
+  
+  export const App = () => {
+    const { register, handleSubmit } = useForm();
+    const [result, setResult] = useState("");
+    const onSubmit = (data) => setResult(JSON.stringify(data));
+  
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+   
+        <input {...register("firstName")} placeholder="First name" />
+        <input {...register("lastName")} placeholder="Last name" />
+        <select {...register("category")}>
+          <option value="">Select...</option>
+          <option value="A">Category A</option>
+          <option value="B">Category B</option>
+        </select>
+        <p>{result}</p>
+        <input type="submit" />
+      </form>
+    );
+  }
 `;
 
-  const { preloadedState, content } = ssr(initialState, jsx);
+  // console.log(
+  //   babel.transform(jsx, {
+  //     filename: "test.ts",
+  //     presets: [["stage-0", { decoratorsLegacy: true }], "react"],
+  //   })?.code
+  // );
+
+  let initialState = {
+    app: {
+      jsx: jsx,
+    },
+  };
+  console.log(initialState);
+
+  const { preloadedState, content } = ssr(initialState);
   const response = template("Server Rendered Page", preloadedState, content);
   res.setHeader("Cache-Control", "assets, max-age=604800");
   res.send(response);

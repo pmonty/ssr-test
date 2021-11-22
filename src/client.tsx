@@ -2,8 +2,8 @@ import * as React from "react";
 
 import { hydrate, render } from "react-dom";
 import { Provider } from "react-redux";
-import configureStore from "./redux/configureStore";
 import { App } from "./components/app";
+import initStore from "./redux/store";
 
 declare global {
   interface Window {
@@ -18,7 +18,7 @@ const state = window.__STATE__;
 delete window.__STATE__;
 
 // reproduce the store used to render the page on server
-const store = configureStore(state);
+const store = initStore(state);
 
 /**
  * hydrate the page to make sure both server and client
