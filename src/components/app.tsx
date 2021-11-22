@@ -7,20 +7,12 @@ import { useSelector } from "react-redux";
 export const App = () => {
   const { jsx } = useSelector((state: any) => state.app);
 
-  // React.useEffect(() => {
-  //   console.log(
-  //     jsx &&
-  //       transform(jsx, {
-  //         filename: "test.ts",
-  //         presets: [["stage-0", { decoratorsLegacy: true }], "react"],
-  //       })?.code
-  //   );
-  // }, []);
-
-  var Component: any = transform(jsx, {
-    filename: "test.ts",
-    presets: ["react", "env"],
-  })?.code;
+  var Component: any = eval(
+    transform(jsx, {
+      filename: "test.ts",
+      presets: ["react", "env"],
+    })?.code as any
+  );
 
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState("");
@@ -29,7 +21,7 @@ export const App = () => {
   return (
     <div>
       <h1>test</h1>
-      {eval(Component)}
+      <Component />
     </div>
   );
 };
