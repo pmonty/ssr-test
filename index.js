@@ -18,11 +18,14 @@ const ssr = require("./views/server");
 // server rendered home page
 app.get("/", (req, res) => {
   var jsx = `
-  const Test = () => {
+  const React = require("react"),
+  ReactDOM = require("react-dom");
 
-    const [state, setState] = useState({ fName: "", lName: "" });
+ function Test () {
 
-    useEffect(() => {
+    const [state, setState] = React.useState({ fName: "", lName: "" });
+
+    React.useEffect(() => {
       console.log(state);
     }, [state]);
 
@@ -52,7 +55,7 @@ app.get("/", (req, res) => {
       </form>
     );
   };
-  <Test />;
+ <Test />
 `;
 
   let initialState = {
