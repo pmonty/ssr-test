@@ -17,13 +17,14 @@ const ssr = require("./views/server");
 
 // server rendered home page
 app.get("/", (req, res) => {
+  var state = JSON.stringify({ test: "dfdffd" });
   var jsx = `
-  const React = require("react"),
-  ReactDOM = require("react-dom");
 
+  function Header() {
+    return(<h1>test</h1>);
+  }
  function Test () {
-
-    const [state, setState] = React.useState({ fName: "", lName: "" });
+    const [state, setState] = React.useState(${state} );
 
     React.useEffect(() => {
       console.log(state);
@@ -31,30 +32,37 @@ app.get("/", (req, res) => {
 
     const handleChange = e => {
       const { name, value } = e.target;
+      console.log(e.target)
       setState(prevState => ({
           ...prevState,
           [name]: value
       }));
   };
   
-    return (
-      <form>
-        <input
-            value={state.fName}
-            type="text"
-            onChange={handleChange}
-            name="fName"
-        />
-        <input
-            value={state.lName}
-            type="text"
-            onChange={handleChange}
-            name="lName"
-        />
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  };
+  const handleSubmit = e => {
+    console.log("tedssad");
+    e.preventDefault();
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+    <Header />
+      <input
+      className="testpaul"
+          value={state.fName}
+          type="text"
+          onChange={handleChange}
+          name="fName"
+      />
+      <input
+          value={state.lName}
+          type="text"
+          onChange={handleChange}
+          name="lName"
+      />
+      <input type="submit" value="Submit" />
+    </form>
+  );
+};
  <Test />
 `;
 
