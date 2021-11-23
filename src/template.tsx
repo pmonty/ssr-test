@@ -15,6 +15,8 @@ function template(title: string, initialState = {}, content = "") {
                 <head>
                   <meta charset="utf-8">
                   <title> ${title} </title>
+                  <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
                 </head>
                 <body>
                   <div class="content">

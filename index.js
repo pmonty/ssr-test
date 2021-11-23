@@ -10,7 +10,7 @@ app.use("/assets", express.static(path.resolve(__dirname, "assets")));
 // hide powered by express
 app.disable("x-powered-by");
 // start the server
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3001);
 
 //SSR function import
 const ssr = require("./views/server");
@@ -18,29 +18,41 @@ const ssr = require("./views/server");
 // server rendered home page
 app.get("/", (req, res) => {
   var jsx = `
-  import { useState } from "react";
-  import { useForm } from "react-hook-form";
-  
-  export const App = () => {
-    const { register, handleSubmit } = useForm();
-    const [result, setResult] = useState("");
-    const onSubmit = (data) => setResult(JSON.stringify(data));
+  const Test = () => {
+
+    const [state, setState] = useState({ fName: "", lName: "" });
+
+    useEffect(() => {
+      console.log(state);
+    }, [state]);
+
+    const handleChange = e => {
+      const { name, value } = e.target;
+      setState(prevState => ({
+          ...prevState,
+          [name]: value
+      }));
+  };
   
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-   
-        <input {...register("firstName")} placeholder="First name" />
-        <input {...register("lastName")} placeholder="Last name" />
-        <select {...register("category")}>
-          <option value="">Select...</option>
-          <option value="A">Category A</option>
-          <option value="B">Category B</option>
-        </select>
-        <p>{result}</p>
-        <input type="submit" />
+      <form>
+        <input
+            value={state.fName}
+            type="text"
+            onChange={handleChange}
+            name="fName"
+        />
+        <input
+            value={state.lName}
+            type="text"
+            onChange={handleChange}
+            name="lName"
+        />
+        <input type="submit" value="Submit" />
       </form>
     );
-  }
+  };
+  <Test />;
 `;
 
   let initialState = {
