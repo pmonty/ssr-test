@@ -13,12 +13,14 @@ export const App = () => {
     editor = createEditor(el);
     editor.run(jsx);
   }, []);
+
+  // Other way of using babeltransform with a different result
   // var Component: any =
   //   jsx &&
   //   eval(
   //     transform(jsx, {
   //       // filename: "test.ts",
-  //       presets: [["stage-0", { decoratorsLegacy: true }], "react"],
+  //       presets: ["es2015", "react"],
   //     })?.code as any
   //   );
 
